@@ -1,0 +1,150 @@
+{
+  "files": [
+    {
+      "path": "CLAUDE.md",
+      "size": 3129,
+      "sha256": "BG6XwCn4IpDBDgZlE4okWUE5ADif+zO9v18UuVKkszs=",
+      "lastWrite": "2026-09-22T15:45:50.7428655Z"
+    },
+    {
+      "path": ".claude/agents/orchestrator.md",
+      "size": 3666,
+      "sha256": "X/Rs4Uzm7geItTT40h89iMxdIVYXz9xBK88FU5Tcbk8=",
+      "lastWrite": "2026-09-22T15:45:50.7595424Z"
+    },
+    {
+      "path": ".claude/agents/infra-worker.md",
+      "size": 1238,
+      "sha256": "YNb1kFyY7cwdLxt6zi/J/UJfZ71ZnUAH0dndIwGrjW4=",
+      "lastWrite": "2026-09-22T15:45:50.7642253Z"
+    },
+    {
+      "path": ".claude/agents/app-worker.md",
+      "size": 1272,
+      "sha256": "MxsdPKtJgKI8ixIDDqwwjWH+FRWAvXoUFGaRSU63D0Y=",
+      "lastWrite": "2026-09-22T15:45:50.7664003Z"
+    },
+    {
+      "path": ".claude/agents/test-worker.md",
+      "size": 1181,
+      "sha256": "TmEg4urAz05404cFAVx34RgBrcxLLMMaIHDLLLMBZkI=",
+      "lastWrite": "2026-09-22T15:45:50.7694046Z"
+    },
+    {
+      "path": ".claude/agents/docs-worker.md",
+      "size": 1207,
+      "sha256": "rqjUQIrQP+vhFa5j0ope+0xrYvlEiT+hUqEk2GYGTeo=",
+      "lastWrite": "2026-09-22T15:45:50.7722765Z"
+    },
+    {
+      "path": ".claude/agents/validator.md",
+      "size": 1352,
+      "sha256": "JB7NIafdi3GpL5AS7LcAAe8AQfEa2caI8jc2LnX7u5E=",
+      "lastWrite": "2026-09-22T15:45:50.7745310Z"
+    },
+    {
+      "path": ".claude/hooks/shared.js",
+      "size": 720,
+      "sha256": "Sf0dltGzJ/HGGQKzZZGTxbS6GMslW70po53dk0CPWhE=",
+      "lastWrite": "2026-09-22T15:45:50.7810769Z"
+    },
+    {
+      "path": ".claude/hooks/guardrail.js",
+      "size": 1248,
+      "sha256": "7nqppxCNu49zOj4quQaCIpf567TGF08+gRofj7JdjGk=",
+      "lastWrite": "2026-09-22T15:45:50.7840876Z"
+    },
+    {
+      "path": ".claude/hooks/auto-remediate.js",
+      "size": 664,
+      "sha256": "f6MgxpMJ+yvRjGzmBn84fyItv3Mt+zojQJ+ardZZK2w=",
+      "lastWrite": "2026-09-22T15:45:50.7860927Z"
+    },
+    {
+      "path": ".claude/hooks/context-monitor.js",
+      "size": 1296,
+      "sha256": "NGqSO7OE2yLZPzprVmK6dEz53fwwGQyAzUAHNClRZp0=",
+      "lastWrite": "2026-09-22T15:45:50.7890872Z"
+    },
+    {
+      "path": ".claude/settings.json",
+      "size": 1246,
+      "sha256": "o0molS/vk+uGWQFH1V9hEy2SzHMTXqP0+VNifRga7Ug=",
+      "lastWrite": "2026-09-22T15:45:50.8291101Z"
+    },
+    {
+      "path": "run-checks.ps1",
+      "size": 2301,
+      "sha256": "/9TkmbssobxF0stlacnGfn9UgesJai5hBF6v8iCs5T8=",
+      "lastWrite": "2026-09-22T15:45:50.8357949Z"
+    },
+    {
+      "path": ".claude/commands/heal.md",
+      "size": 901,
+      "sha256": "sQfai/O7mMGYJ1MShPk4PX8ACpJaQj0vR/JeJCIig6A=",
+      "lastWrite": "2026-09-22T15:45:50.8387956Z"
+    },
+    {
+      "path": ".gitignore",
+      "size": 539,
+      "sha256": "66SBAr2zDms+g+v+DSvbY1hc0TVuMSStQKKKswg+0TU=",
+      "lastWrite": "2026-09-22T15:45:50.8407952Z"
+    },
+    {
+      "path": "LICENSE",
+      "size": 1055,
+      "sha256": "JuDRkpJ1tG2YXCjsW0iF9Ob8IH0K2Sd3c9WMTBPfO7o=",
+      "lastWrite": "2026-09-22T15:45:50.8490976Z"
+    },
+    {
+      "path": ".editorconfig",
+      "size": 323,
+      "sha256": "Tfi0gqyGLF2epUUVtaoAUDdcrnBakA1xaeaf/zV9OL0=",
+      "lastWrite": "2026-09-22T15:45:50.8690603Z"
+    },
+    {
+      "path": ".pre-commit-config.yaml",
+      "size": 518,
+      "sha256": "hUad+VbClIyQ1nPMBNR076tBbAqL/1/MzLT6XU901ww=",
+      "lastWrite": "2026-09-22T15:45:50.8795829Z"
+    },
+    {
+      "path": ".github/CODEOWNERS",
+      "size": 180,
+      "sha256": "wgvpJxHglOcwsUeOkgzCOk40NWAcwA4mIgL/wOEefpQ=",
+      "lastWrite": "2026-09-22T15:45:50.8867222Z"
+    },
+    {
+      "path": ".github/PULL_REQUEST_TEMPLATE.md",
+      "size": 441,
+      "sha256": "hrwde8/Gpz9XhNRkUdY3Jf1a6xusCK7dcxZFA+1bgQg=",
+      "lastWrite": "2026-09-22T15:45:50.8887170Z"
+    },
+    {
+      "path": ".github/ISSUE_TEMPLATE/bug_report.md",
+      "size": 499,
+      "sha256": "bmygKdMbPD9AsVTejAKgbeZYEMI/9IpjuYUu//Jrv/k=",
+      "lastWrite": "2026-09-22T15:45:50.8927206Z"
+    },
+    {
+      "path": ".github/ISSUE_TEMPLATE/feature_request.md",
+      "size": 381,
+      "sha256": "M49ZZxdWimt5/ZTVTfavaugaee48035gpbAIniGMWk0=",
+      "lastWrite": "2026-09-22T15:45:50.8950522Z"
+    },
+    {
+      "path": "SECURITY.md",
+      "size": 689,
+      "sha256": "0nFRJWD8tzVNTEHBZbVGgy/mRh6Ln1X/bbPxOqwnJMM=",
+      "lastWrite": "2026-09-22T15:45:50.8968300Z"
+    },
+    {
+      "path": "CONTRIBUTING.md",
+      "size": 1170,
+      "sha256": "ebkNzDOIYt6A5TqO/xAOszReIcrQxNguFQBW5GiUQYs=",
+      "lastWrite": "2026-09-22T15:45:50.9003948Z"
+    }
+  ],
+  "generatedAt": "2026-09-22T11:45:51.2071082-04:00",
+  "generatorVersion": 1
+}

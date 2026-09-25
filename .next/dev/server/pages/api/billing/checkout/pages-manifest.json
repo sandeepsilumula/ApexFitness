@@ -1,0 +1,3 @@
+{
+  "/api/billing/checkout": "pages/api/billing/checkout.js"
+}

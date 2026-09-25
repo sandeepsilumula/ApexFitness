@@ -1,0 +1,227 @@
+{
+  "version": 3,
+  "pages404": true,
+  "appType": "pages",
+  "caseSensitive": false,
+  "basePath": "",
+  "redirects": [
+    {
+      "source": "/:path+/",
+      "destination": "/:path+",
+      "internal": true,
+      "priority": true,
+      "statusCode": 308,
+      "regex": "^(?:/((?:[^/]+?)(?:/(?:[^/]+?))*))/$"
+    }
+  ],
+  "headers": [],
+  "onMatchHeaders": [],
+  "rewrites": {
+    "beforeFiles": [],
+    "afterFiles": [],
+    "fallback": []
+  },
+  "dynamicRoutes": [
+    {
+      "page": "/api/workouts/[id]",
+      "regex": "^/api/workouts/([^/]+?)(?:/)?$",
+      "routeKeys": {
+        "nxtPid": "nxtPid"
+      },
+      "namedRegex": "^/api/workouts/(?<nxtPid>[^/]+?)(?:/)?$"
+    },
+    {
+      "page": "/api/workouts/[id]/log",
+      "regex": "^/api/workouts/([^/]+?)/log(?:/)?$",
+      "routeKeys": {
+        "nxtPid": "nxtPid"
+      },
+      "namedRegex": "^/api/workouts/(?<nxtPid>[^/]+?)/log(?:/)?$"
+    },
+    {
+      "page": "/api/workouts/[id]/sets",
+      "regex": "^/api/workouts/([^/]+?)/sets(?:/)?$",
+      "routeKeys": {
+        "nxtPid": "nxtPid"
+      },
+      "namedRegex": "^/api/workouts/(?<nxtPid>[^/]+?)/sets(?:/)?$"
+    },
+    {
+      "page": "/workouts/[id]",
+      "regex": "^/workouts/([^/]+?)(?:/)?$",
+      "routeKeys": {
+        "nxtPid": "nxtPid"
+      },
+      "namedRegex": "^/workouts/(?<nxtPid>[^/]+?)(?:/)?$"
+    }
+  ],
+  "staticRoutes": [
+    {
+      "page": "/",
+      "regex": "^/(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/(?:/)?$"
+    },
+    {
+      "page": "/api/ai/chat",
+      "regex": "^/api/ai/chat(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/api/ai/chat(?:/)?$"
+    },
+    {
+      "page": "/api/auth/login",
+      "regex": "^/api/auth/login(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/api/auth/login(?:/)?$"
+    },
+    {
+      "page": "/api/auth/logout",
+      "regex": "^/api/auth/logout(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/api/auth/logout(?:/)?$"
+    },
+    {
+      "page": "/api/auth/me",
+      "regex": "^/api/auth/me(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/api/auth/me(?:/)?$"
+    },
+    {
+      "page": "/api/auth/signup",
+      "regex": "^/api/auth/signup(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/api/auth/signup(?:/)?$"
+    },
+    {
+      "page": "/api/billing/checkout",
+      "regex": "^/api/billing/checkout(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/api/billing/checkout(?:/)?$"
+    },
+    {
+      "page": "/api/billing/plan",
+      "regex": "^/api/billing/plan(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/api/billing/plan(?:/)?$"
+    },
+    {
+      "page": "/api/billing/portal",
+      "regex": "^/api/billing/portal(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/api/billing/portal(?:/)?$"
+    },
+    {
+      "page": "/api/diet-plans",
+      "regex": "^/api/diet\\-plans(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/api/diet\\-plans(?:/)?$"
+    },
+    {
+      "page": "/api/progress",
+      "regex": "^/api/progress(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/api/progress(?:/)?$"
+    },
+    {
+      "page": "/api/progress/metrics",
+      "regex": "^/api/progress/metrics(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/api/progress/metrics(?:/)?$"
+    },
+    {
+      "page": "/api/webhooks/stripe",
+      "regex": "^/api/webhooks/stripe(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/api/webhooks/stripe(?:/)?$"
+    },
+    {
+      "page": "/api/workouts",
+      "regex": "^/api/workouts(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/api/workouts(?:/)?$"
+    },
+    {
+      "page": "/checkout",
+      "regex": "^/checkout(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/checkout(?:/)?$"
+    },
+    {
+      "page": "/coach",
+      "regex": "^/coach(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/coach(?:/)?$"
+    },
+    {
+      "page": "/dashboard",
+      "regex": "^/dashboard(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/dashboard(?:/)?$"
+    },
+    {
+      "page": "/diet",
+      "regex": "^/diet(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/diet(?:/)?$"
+    },
+    {
+      "page": "/login",
+      "regex": "^/login(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/login(?:/)?$"
+    },
+    {
+      "page": "/progress",
+      "regex": "^/progress(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/progress(?:/)?$"
+    },
+    {
+      "page": "/settings",
+      "regex": "^/settings(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/settings(?:/)?$"
+    },
+    {
+      "page": "/signup",
+      "regex": "^/signup(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/signup(?:/)?$"
+    },
+    {
+      "page": "/workouts",
+      "regex": "^/workouts(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/workouts(?:/)?$"
+    },
+    {
+      "page": "/workouts/workouts",
+      "regex": "^/workouts/workouts(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/workouts/workouts(?:/)?$"
+    }
+  ],
+  "dataRoutes": [
+    {
+      "page": "/",
+      "dataRouteRegex": "^/_next/data/bTryh3uMfkhy2lJEuAC3q/index\\.json$"
+    }
+  ],
+  "rsc": {
+    "header": "rsc",
+    "varyHeader": "rsc, next-router-state-tree, next-router-prefetch, next-router-segment-prefetch",
+    "prefetchHeader": "next-router-prefetch",
+    "didPostponeHeader": "x-nextjs-postponed",
+    "contentTypeHeader": "text/x-component",
+    "suffix": ".rsc",
+    "prefetchSegmentHeader": "next-router-segment-prefetch",
+    "prefetchSegmentSuffix": ".segment.rsc",
+    "prefetchSegmentDirSuffix": ".segments",
+    "clientParamParsing": false,
+    "dynamicRSCPrerender": false
+  },
+  "rewriteHeaders": {
+    "pathHeader": "x-nextjs-rewritten-path",
+    "queryHeader": "x-nextjs-rewritten-query"
+  }
+}

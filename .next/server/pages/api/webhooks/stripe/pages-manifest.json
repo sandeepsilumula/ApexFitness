@@ -1,0 +1,3 @@
+{
+  "/api/webhooks/stripe": "pages/api/webhooks/stripe.js"
+}

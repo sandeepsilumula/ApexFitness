@@ -1,0 +1,8 @@
+__turbopack_load_page_chunks__("/workouts", [
+  "static/chunks/2ob77o6s2uf00.js",
+  "static/chunks/22h_cangcede0.js",
+  "static/chunks/10jwavls0cw2n.js",
+  "static/chunks/2yifhtu4wbp8y.js",
+  "static/chunks/1emyeuep-i0kv.js",
+  "static/chunks/turbopack-1rvao_c0gzevp.js"
+])

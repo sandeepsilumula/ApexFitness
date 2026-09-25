@@ -1,0 +1,6 @@
+{
+  "version": 3,
+  "sources": [],
+  "sections": [
+    {"offset": {"line": 16, "column": 0}, "map": {"version":3,"sources":["file:///C:/Users/Sam's/Desktop/Projects/test/pages/index.tsx"],"sourcesContent":["export default function FitnessApp() {\n  return (\n    <>\n      <nav><a href=\"#videos\">Exercise Videos</a><a href=\"#diets\">Diet Plans</a><a href=\"#ai\">AI Coaching</a></nav>\n      <h1>Fitness App — Premium</h1>\n      <section id=\"videos\"><h2>Exercise Videos</h2><p>Curated video library.</p></section>\n      <section id=\"diets\"><h2>Diet Plans</h2><p>Tailored nutrition.</p></section>\n      <section id=\"ai\"><h2>AI Coaching</h2><p>Personalized feedback.</p></section>\n      <p>Stripe Subscriptions | Analytics</p>\n    </>\n  );\n}\n"],"names":["FitnessApp","href","id"],"mappings":";;;;;;AAAe,SAASA;IACtB,qBACE;;0BACE,qKAAC;;kCAAI,qKAAC;wBAAEC,MAAK;kCAAU;;;;;;kCAAmB,qKAAC;wBAAEA,MAAK;kCAAS;;;;;;kCAAc,qKAAC;wBAAEA,MAAK;kCAAM;;;;;;;;;;;;0BACvF,qKAAC;0BAAG;;;;;;0BACJ,qKAAC;gBAAQC,IAAG;;kCAAS,qKAAC;kCAAG;;;;;;kCAAoB,qKAAC;kCAAE;;;;;;;;;;;;0BAChD,qKAAC;gBAAQA,IAAG;;kCAAQ,qKAAC;kCAAG;;;;;;kCAAe,qKAAC;kCAAE;;;;;;;;;;;;0BAC1C,qKAAC;gBAAQA,IAAG;;kCAAK,qKAAC;kCAAG;;;;;;kCAAgB,qKAAC;kCAAE;;;;;;;;;;;;0BACxC,qKAAC;0BAAE;;;;;;;;;;;;AAGT"}}]
+}

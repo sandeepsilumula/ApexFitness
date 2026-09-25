@@ -1,0 +1,205 @@
+@import "tailwindcss";
+
+/*
+   * The four-surface navy ladder. Three steps was too few: a resting card on
+   * navy-800 sat on the same value as the page, so the card had no edge. The
+   * ladder is now: page = navy-900 / navy-950, resting card = navy-850,
+   * raised or hover = navy-800.
+ */
+@theme {
+  --color-navy-950: #0a1128;
+  --color-navy-900: #0f172a;
+  --color-navy-850: #16203a;
+  --color-navy-800: #1e293b;
+
+  --color-emerald-300: #6ee7b7;
+  --color-emerald-400: #34d399;
+  --color-emerald-500: #10b981;
+  --color-emerald-600: #059669;
+
+  /*
+   * The custom gold ramp. gold-400/500/600 are the stock Tailwind amber
+   * steps and stay declared because existing code references them, but the
+   * new 300/450/550 are what new work should use — amber reads cheap
+   * against navy, a cooler, less saturated gold reads as metal.
+   *
+   *   gold-300  champagne, for text on navy
+   *   gold-450  the primary gold: premium accent, focus ring, key emphasis
+   *   gold-550  deep gold, for borders and subtle fills
+   */
+  --color-gold-300: #e8d9a0;
+  --color-gold-450: #c9a227;
+  --color-gold-550: #a8842a;
+  --color-gold-400: #fbbf24;
+  --color-gold-500: #f59e0b;
+  --color-gold-600: #d97706;
+
+  /*
+   * The brand ramp, tuned between emerald and jade so the app stops reading
+   * as stock Tailwind emerald. Measured against all four navy surfaces:
+   * 200/300/400/500 clear 4.5:1, 700 clears 3:1 and is for background or
+   * border use only.
+   *
+   *   brand-300  the primary brand action colour (buttons, active tab, links)
+   *   brand-400  hover / pressed on a brand-300 action
+   *   brand-500  the brand fill at rest, and large text
+   *   brand-700  background, border and subtle fill only — never body text
+   */
+  --color-brand-200: #6ee7c8;
+  --color-brand-300: #4bd6b2;
+  --color-brand-400: #2fb894;
+  --color-brand-500: #23a884;
+  --color-brand-700: #1c8f70;
+
+  /*
+   * Elevation. Shadow on a near-black surface cannot work the way it does on
+   * white: a pure black shadow at high opacity reads as a smudge, not depth.
+   * So every layer is a low-alpha, slightly warm navy rather than #000, and
+   * each step is built from a tight contact shadow plus one diffuse layer.
+   *
+   *   elevation-1  resting card — separates it from the page by a hair
+   *   elevation-2  hover or otherwise raised surface
+   *   elevation-3  overlay: sheet, modal, drawer
+   */
+  --shadow-elevation-1: 0 1px 2px rgb(8 12 24 / 0.45);
+  --shadow-elevation-2:
+    0 2px 4px -2px rgb(8 12 24 / 0.4), 0 6px 16px -4px rgb(8 12 24 / 0.5);
+  --shadow-elevation-3:
+    0 4px 12px -4px rgb(8 12 24 / 0.45), 0 20px 44px -12px rgb(6 10 22 / 0.7);
+
+  --font-sans: 'Inter', ui-sans-serif, system-ui, sans-serif;
+  --font-display: 'Playfair Display', ui-serif, Georgia, serif;
+
+  /*
+   * THE TYPE SCALE — six steps and nothing else: 12 / 14 / 16 / 20 / 30 / 44.
+   *
+   * They are declared as `--text-*` tokens rather than left as ad-hoc
+   * `text-sm` / `text-lg` utilities so the scale is a nameable contract. A
+   * reviewer can grep `text-[` and see the one-off sizes that escaped it, and
+   * a new step has to be argued for here instead of appearing on one page.
+   *
+   *   text-meta      12  uppercase eyebrows, axis ticks, unit chips, avatars
+   *   text-caption   14  supporting copy: card bodies, stat rows, table cells
+   *   text-body      16  running prose and every form control (see below)
+   *   text-section   20  section headings (display face) and card titles
+   *   text-page      30  page headings (display face)
+   *   text-display   44  the single hero word on the landing page
+   *
+   * Two rules that ride on top of the ladder:
+   *
+   *   1. Playfair (`font-display`) is for headings at `text-section` and
+   *      above. Inter carries everything at `text-caption` and below, so the
+   *      two faces never share a size and the display face keeps doing work.
+   *   2. `text-body` is the floor for anything the user can type into or read
+   *      as a paragraph. iOS Safari zooms any form control under 16px on
+   *      focus, so no `text-caption` on an `<input>` or `<select>`.
+   *
+   * Letter-spacing: 12px uppercase metadata takes `tracking-[0.06em]`, which
+   * keeps capitals legible at the size without the loose 0.25em tracking that
+   * made small caps look airy. Nothing else is tracked.
+   */
+  --text-meta: 0.75rem;
+  --text-meta--line-height: 1rem;
+  --text-caption: 0.875rem;
+  --text-caption--line-height: 1.375rem;
+  --text-body: 1rem;
+  --text-body--line-height: 1.625rem;
+  --text-section: 1.25rem;
+  --text-section--line-height: 1.75rem;
+  --text-page: 1.875rem;
+  --text-page--line-height: 2.125rem;
+  --text-display: 2.75rem;
+  --text-display--line-height: 1.1;
+}
+
+/*
+   * Bottom tab bar geometry, defined once so the bar and the content padding
+   * that clears it cannot drift apart. `--safe-bottom` is the iOS home
+   * indicator / Android gesture bar inset and resolves to 0px on desktop, so a
+   * single value works in both the bar's own padding and `<main>`'s reserve.
+ */
+:root {
+  --safe-bottom: env(safe-area-inset-bottom, 0px);
+  --bottom-nav-height: 4.25rem;
+  --bottom-nav-total: calc(var(--bottom-nav-height) + var(--safe-bottom));
+}
+
+body {
+  background: var(--color-navy-950);
+  color: #e2e8f0;
+  font-family: var(--font-sans);
+}
+
+/* The single focus treatment for the whole app. Gold on navy is the luxury
+   read and clears the 3:1 non-text floor, so one definition here cannot drift
+   between a nav link, a button and a form input.
+
+   The two shadows are layered: a 2px navy-950 ring that acts as the offset,
+   then the 4px gold ring. The gold is drawn entirely outside the control's
+   border box, so a gold-filled button does not have to switch variants. */
+@utility focus-ring {
+  &:focus-visible {
+    outline: 2px solid transparent;
+    outline-offset: 2px;
+    box-shadow:
+      0 0 0 2px var(--color-navy-950),
+      0 0 0 4px var(--color-gold-400);
+  }
+}
+
+/* WCAG 2.5.8: 44px in the smallest axis, carried by padding/min-height so no
+   control has to grow visually to satisfy it. */
+@utility min-tap {
+  min-height: 2.75rem;
+}
+
+/* For inline or icon-only controls that must not change size at all: this
+   extends the hit area to 44px with an invisible pseudo-element centred on
+   the control. Requires the element to be `position: relative`. */
+@utility tap-target-expand {
+  &::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    translate: -50% -50%;
+    width: 100%;
+    height: 100%;
+    min-width: 2.75rem;
+    min-height: 2.75rem;
+  }
+}
+
+@keyframes shimmer {
+  0% { background-position: -200% 0 }
+  100% { background-position: 200% 0 }
+}
+
+.animate-shimmer {
+  background: linear-gradient(90deg, #1e293b 25%, #334155 50%, #1e293b 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite linear;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-shimmer { animation: none; background: #1e293b; }
+}
+
+@media (forced-colors: active) {
+  .grain, .glow { display: none !important; }
+}
+
+.grain {
+  position: fixed; inset: 0; z-index: 9999; pointer-events: none; aria-hidden: true;
+  opacity: 0.025; background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-repeat: repeat; background-size: 256px 256px;
+}
+
+.glow {
+  position: fixed; inset: 0; z-index: 0; pointer-events: none; aria-hidden: true;
+  opacity: 0.04; background: radial-gradient(circle at 50% 20%, #fbbf24 0%, transparent 60%);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; scroll-behavior: auto !important; }
+}

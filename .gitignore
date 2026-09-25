@@ -1,0 +1,53 @@
+# Dependencies
+node_modules/
+vendor/
+__pycache__/
+*.pyc
+.dart_tool/
+.gradle/
+target/
+bin/
+obj/
+dist/
+build/
+.vagrant/
+.next-e2e/
+test-results/
+playwright-report/
+blob-report/
+
+# Environment and secrets
+.env
+.env.*
+*.pem
+*.key
+*.secret
+*.credentials
+secrets/
+
+# IDE / Editor
+.vscode/settings.json
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+logs/
+.claude/.context-counter.txt
+.claude/.context-usage.log
+.claude/last_error.log
+.claude/hooks/guardrail.log
+.claude/hooks/auto-remediate.log
+.claude/.telemetry.json
+
+# OS
+.DS_Store
+Thumbs.db
+Desktop.ini
+
+# Generated workspace backups
+*.bak
