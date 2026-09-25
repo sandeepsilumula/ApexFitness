@@ -1,8 +1,0 @@
-__turbopack_load_page_chunks__("/progress", [
-  "static/chunks/0m6xf-tajcswe.js",
-  "static/chunks/22h_cangcede0.js",
-  "static/chunks/2yifhtu4wbp8y.js",
-  "static/chunks/10jwavls0cw2n.js",
-  "static/chunks/1emyeuep-i0kv.js",
-  "static/chunks/turbopack-2_p-hb4z4w4rc.js"
-])

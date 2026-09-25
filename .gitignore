@@ -50,4 +50,5 @@ Thumbs.db
 Desktop.ini
 
 # Generated workspace backups
-*.bak
+*.bak.next/
+node_modules/

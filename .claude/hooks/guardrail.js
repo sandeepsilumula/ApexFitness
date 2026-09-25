@@ -1,6 +1,0 @@
-#!/usr/bin/env node
-'use strict'; const {readStdin,denyResponse,logToProjectFile}=require('./shared');
-const P=[{re:/drop\s+database/i,rs:'Drop database'},{re:/drop\s+table/i,rs:'Drop table'},{re:/delete\s+from\s+\w+(?:\s+;|\s*$)/i,rs:'Table delete'},{re:/terraform\s+destroy/i,rs:'Terraform destroy'},{re:/terraform\s+apply\s+-auto-approve/i,rs:'Auto-approve'},{re:/kubectl\s+delete\s+namespace/i,rs:'K8s delete'},{re:/rm\s+-rf\s+\//i,rs:'rm -rf /'},{re:/docker\s+system\s+prune\s+-a/i,rs:'Docker prune'},{re:/git\s+push\b.*--force/i,rs:'Force push'},{re:/npm\s+publish/i,rs:'npm publish'},{re:/aws\s+s3\s+rb/i,rs:'S3 delete'},{re:/aws\s+ec2\s+terminate-instances/i,rs:'EC2 terminate'},{re:/helm\s+(uninstall|delete)/i,rs:'Helm delete'}];
-async function main(){const p=await readStdin();if(p.hook_event_name!=='PreToolUse'||p.tool_name!=='Bash'||!p.tool_input?.command){process.stdout.write('{}');process.exit(0)}
-const cmd=p.tool_input.command;for(const r of P){if(r.re.test(cmd)){logToProjectFile(p,'guardrail.log','BLOCKED: '+r.rs+' -- '+cmd.slice(0,200));process.stdout.write(denyResponse(r.rs));process.exit(0)}}
-process.stdout.write('{}');process.exit(0)}main().catch(()=>{process.stdout.write('{}');process.exit(0)});
