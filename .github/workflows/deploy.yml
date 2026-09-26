@@ -61,18 +61,23 @@ jobs:
     # The app is useless without its database, so a failed verify blocks the
     # deploy rather than shipping a broken build to a live URL.
     environment: production
-    # No Railway service is provisioned yet, so the two secrets are unset. Skip
-    # instead of failing every push with a confusing auth error — the verify
-    # gate above still runs and still reports, which is the part that matters.
-    # Delete this block once RAILWAY_TOKEN and RAILWAY_SERVICE_ID are set.
-    if: ${{ secrets.RAILWAY_TOKEN != '' && secrets.RAILWAY_SERVICE_ID != '' }}
     steps:
       - uses: actions/checkout@v4
 
       # RAILWAY_TOKEN is a Railway API token with project deploy rights.
       # RAILWAY_SERVICE_ID is the service to deploy. Both are repository
       # secrets, set under Settings -> Secrets and variables -> Actions.
+      #
+      # The guard lives on the step, not on the job. `secrets` is not in the
+      # context list for `jobs.<job_id>.if` (github, needs, vars, inputs), so a
+      # job-level `if: ${{ secrets... }}` makes the whole workflow file invalid
+      # — Actions then rejects it up front and the run is reported as a failure
+      # with zero jobs, which is a misleading signal for a test problem. At
+      # step level `secrets` resolves normally and the step skips cleanly.
+      #
+      # Remove this `if:` once both secrets are set.
       - name: Deploy
+        if: ${{ secrets.RAILWAY_TOKEN != '' && secrets.RAILWAY_SERVICE_ID != '' }}
         env:
           RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
           RAILWAY_SERVICE_ID: ${{ secrets.RAILWAY_SERVICE_ID }}
