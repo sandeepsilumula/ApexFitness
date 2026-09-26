@@ -41,12 +41,13 @@ jobs:
         run: npm run typecheck
 
       # 194 tests. Both suites share one SQLite file and run single-threaded by
-      # design — see vitest.config.mts. The test database is a build artefact,
-      # so CI creates its own rather than using DATABASE_URL.
+      # design — see vitest.config.mts. The suite provisions that file itself
+      # from the committed migrations (tests/global-setup.ts), so this step must
+      # not hand it a DATABASE_URL: tests/setup.ts overwrites it with
+      # file:./test.db regardless, and a fresh runner has no migrated database
+      # to begin with.
       - name: Unit and API tests
         run: npm test
-        env:
-          DATABASE_URL: file:./test.db
 
       - name: Build
         run: npm run build
@@ -60,6 +61,11 @@ jobs:
     # The app is useless without its database, so a failed verify blocks the
     # deploy rather than shipping a broken build to a live URL.
     environment: production
+    # No Railway service is provisioned yet, so the two secrets are unset. Skip
+    # instead of failing every push with a confusing auth error — the verify
+    # gate above still runs and still reports, which is the part that matters.
+    # Delete this block once RAILWAY_TOKEN and RAILWAY_SERVICE_ID are set.
+    if: ${{ secrets.RAILWAY_TOKEN != '' && secrets.RAILWAY_SERVICE_ID != '' }}
     steps:
       - uses: actions/checkout@v4
 
