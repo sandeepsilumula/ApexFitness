@@ -68,18 +68,24 @@ jobs:
       # RAILWAY_SERVICE_ID is the service to deploy. Both are repository
       # secrets, set under Settings -> Secrets and variables -> Actions.
       #
-      # The guard lives on the step, not on the job. `secrets` is not in the
-      # context list for `jobs.<job_id>.if` (github, needs, vars, inputs), so a
-      # job-level `if: ${{ secrets... }}` makes the whole workflow file invalid
-      # — Actions then rejects it up front and the run is reported as a failure
-      # with zero jobs, which is a misleading signal for a test problem. At
-      # step level `secrets` resolves normally and the step skips cleanly.
+      # The "are the secrets set?" check runs in the shell, not in an `if:`.
+      # `secrets` is not in the context list for `jobs.<job_id>.if` (github,
+      # needs, vars, inputs) *nor* for `jobs.<job_id>.steps.*.if`, which allows
+      # only env, github, inputs, job, matrix, needs, runner, steps, strategy
+      # and vars. Referencing `secrets` in either place does not fail that one
+      # step — it makes the whole workflow file invalid, so Actions rejects it
+      # before creating any job and reports a failure with zero jobs, which
+      # reads like a test failure and is not one. Reading the values through
+      # `env:` first and testing in the shell avoids that entirely.
       #
-      # Remove this `if:` once both secrets are set.
+      # Remove this guard once both secrets are set.
       - name: Deploy
-        if: ${{ secrets.RAILWAY_TOKEN != '' && secrets.RAILWAY_SERVICE_ID != '' }}
         env:
           RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
           RAILWAY_SERVICE_ID: ${{ secrets.RAILWAY_SERVICE_ID }}
         run: |
+          if [ -z "$RAILWAY_TOKEN" ] || [ -z "$RAILWAY_SERVICE_ID" ]; then
+            echo "::notice::Railway secrets are not set; skipping deploy. Add RAILWAY_TOKEN and RAILWAY_SERVICE_ID under Settings -> Secrets and variables -> Actions."
+            exit 0
+          fi
           npx @railway/cli@latest up --service "$RAILWAY_SERVICE_ID"
