@@ -1,54 +1,73 @@
 # Dependencies
 node_modules/
-vendor/
-__pycache__/
-*.pyc
-.dart_tool/
-.gradle/
-target/
-bin/
-obj/
+
+# Build output
 dist/
-build/
-.vagrant/
+.next/
 .next-e2e/
+_next/
+out/
+*.tsbuildinfo
+
+# Test output
 test-results/
 playwright-report/
 blob-report/
+coverage/
+
+# Databases — SQLite files are per-machine state, never committed.
+# Recreate with `npx prisma migrate dev` and `npx tsx prisma/seed.ts`.
+*.db
+*.db-journal
+prisma/dev.db*
 
 # Environment and secrets
 .env
 .env.*
+!.env.example
 *.pem
 *.key
 *.secret
 *.credentials
 secrets/
 
-# IDE / Editor
-.vscode/settings.json
-.idea/
-*.swp
-*.swo
-*~
-.DS_Store
-Thumbs.db
-
 # Logs
 *.log
 logs/
-.claude/.context-counter.txt
-.claude/.context-usage.log
-.claude/last_error.log
-.claude/hooks/guardrail.log
-.claude/hooks/auto-remediate.log
-.claude/.telemetry.json
+
+# Agent and editor scratch
+.claude/
+.superpowers/
+.idea/
+.vscode/settings.json
+*.swp
+*.swo
+*~
 
 # OS
 .DS_Store
 Thumbs.db
 Desktop.ini
 
-# Generated workspace backups
-*.bak.next/
-node_modules/
+# Static export output (next.config.js was removed; the source lives in public/)
+/_next/
+static-deploy/
+
+# Byte-identical static-export copies of public/ — the public/ versions are the
+# source of truth. Anchored to the repo root so public/ stays tracked.
+/sw.js
+/manifest.webmanifest
+/offline.html
+/favicon.png
+/apple-touch-icon.png
+/icon-192.png
+/icon-512.png
+/icon-maskable-512.png
+/.gitignore-ghpages
+
+# Unused generator scaffolding. The API is Next.js API routes under pages/api/
+# and the datasource is SQLite, so the NestJS app and the Postgres/Redis
+# compose file are dead weight. See README.md "Architecture".
+/backend/
+/frontend/
+/docker-compose.yml
