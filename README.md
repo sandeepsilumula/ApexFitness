@@ -22,12 +22,20 @@ Design tokens and component rules live in [DESIGN.md](./DESIGN.md). Deployment i
 
 ## Getting started
 
+### Local development
+
 ```bash
 npm install
 npm run db:migrate     # creates the SQLite file and schema
 npm run db:seed        # workouts, meal plans and meals
 npm run dev
 ```
+
+### GitHub Codespaces
+
+1. Click the "Code" button on GitHub repo, then "Open with Codespaces".
+2. Codespace automatically installs dependencies, migrates database, and seeds data.
+3. `npm run dev` to start application.
 
 The app runs with no credentials at all. Without `STRIPE_SECRET_KEY` billing uses a
 simulated provider; without an AI key the coach answers from a simulated provider that is a

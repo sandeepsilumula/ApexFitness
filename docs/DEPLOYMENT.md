@@ -200,8 +200,14 @@ Expect `403` `PREMIUM_REQUIRED`.
 Flip a test user to premium:
 
 ```bash
-npx prisma db execute --url "$DATABASE_URL" --stdin <<< "UPDATE User SET subscriptionTier='premium' WHERE email='verify-<stamp>@example.test';"
+echo "UPDATE User SET subscriptionTier='premium' WHERE email='verify-<stamp>@example.test';" | npx prisma db execute --stdin
 ```
+
+Prisma 7 removed `prisma db execute --url`. The command takes its connection from
+`prisma.config.ts`, which reads `DATABASE_URL` from the environment — so export
+`DATABASE_URL` first, and use `--stdin` (or `--file <path>`) to pass the SQL. Passing
+`--url` does not fail loudly: the CLI prints its usage banner and executes nothing, so a
+verification step looks like a no-op.
 
 Re-run `/api/progress` and expect a `volumeSeries` key that was absent before. Re-run the
 chat call and expect `200` with a real answer. If `ANTHROPIC_API_KEY` is unset, the reply
@@ -372,7 +378,7 @@ code path that downgrades on cancellation. If you need to revoke a premium accou
 the row directly:
 
 ```bash
-npx prisma db execute --url "$DATABASE_URL" --stdin <<< "UPDATE User SET subscriptionTier='free' WHERE email='<email>';"
+echo "UPDATE User SET subscriptionTier='free' WHERE email='<email>';" | npx prisma db execute --stdin
 ```
 
 **Seed content.** The seed only upserts by slug, so rolling it back means re-running it
