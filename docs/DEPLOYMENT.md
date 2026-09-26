@@ -7,11 +7,10 @@ you, with your own host and your own credentials.
 ## What you are deploying
 
 A `next build` / `next start` server with a SQLite database file. There is no container
-image, no Dockerfile, and no `deploy/` configuration in this repository — `deploy/` is
-empty and `docker-compose.yml` (Postgres + Redis) is scaffolding from the workspace
-generator that the app does not use. The schema's datasource is SQLite and every query
-goes through `@prisma/adapter-better-sqlite3`, so the database is a single file on local
-disk.
+image and no Dockerfile. The `docker-compose.yml`, `backend/` and `frontend/` scaffolding the
+workspace generator produced has been removed from the repository; none of it is used. The
+schema's datasource is SQLite and every query goes through
+`@prisma/adapter-better-sqlite3`, so the database is a single file on local disk.
 
 That single fact drives most of the decisions below: the host must have a **persistent,
 writable filesystem**, and rolling deployments that run two instances at once will

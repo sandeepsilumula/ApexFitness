@@ -189,9 +189,11 @@ All optional. `.env` and `.env.*` are gitignored.
 `docs/DEPLOYMENT.md` covers the real case: a Next.js server plus a SQLite file on a
 persistent writable volume. The short version — the host must have persistent writable
 storage, and two concurrent instances will diverge unless the filesystem is shared.
-`next.config.js` also carries a static-export build (`output: 'export'`, `distDir: 'dist'`)
-for hosts that want a CDN-only deploy; that build has no server runtime, so the API routes
-are unavailable on it.
+
+There is no static-export config. An earlier `next.config.js` set `output: 'export'`, which
+strips the server runtime and disables every API route; it was removed so `next.config.ts`
+is the single config. A CDN-only deploy of this app is therefore not possible without
+reinstating that, and it would mean giving up auth, workouts, coach and billing.
 
 ## Licence
 
