@@ -1,8 +1,12 @@
 # Deployment
 
 This guide covers deploying Apex Fitness as a standalone Node process. Nothing here has
-been executed — the steps are written against the code as it stands and need to be run by
-you, with your own host and your own credentials.
+been executed against a live host — the steps are written against the code as it stands
+and need to be run by you, with your own host and your own credentials.
+
+The recommended target is a single Railway or Render service with a mounted volume. See
+[Railway / Render](#railway--render-managed-container) below. Every other section applies
+to any host, because the app is a plain Node server with one persistent file.
 
 ## What you are deploying
 
@@ -18,9 +22,8 @@ produce two divergent SQLite files unless the filesystem is shared.
 
 ## Prerequisites
 
-- Node.js — the project was developed against v24.16.0. `package.json` declares no
-  `engines` field, so any sufficiently recent LTS should work, but this is the tested
-  version.
+- Node.js — the project was developed and tested against v24.16.0. `package.json` now
+  declares `"engines": { "node": ">=24" }`, so the host must run Node 24 or later.
 - A writable persistent directory for the SQLite file. The absolute path comes from
   `DATABASE_URL`; relative paths resolve against the process working directory, which for
   Prisma means the project root.
@@ -75,12 +78,14 @@ Actions only.
 
 ```bash
 npm ci
-npx prisma generate
 npm run build
 ```
 
-`prisma generate` must run after install and before anything imports `@/lib/db`. The
-`postinstall` hook is not relied on. `npm run build` is `next build` and writes to `.next`.
+`npm ci` triggers the `postinstall` hook, which runs `prisma generate`. The
+`build` and `typecheck` scripts also run `prisma generate` themselves, so a fresh checkout
+cannot reach a step that imports `@/lib/db` with no Prisma Client present — the failure
+mode is ~20 confusing "no exported member 'PrismaClient'" errors across pages, API routes
+and tests. `npm run build` writes to `.next` (`distDir` is no longer overridden).
 
 ## Database migrations
 
@@ -101,7 +106,7 @@ Optional, and only for a fresh database. There is no data in production that com
 the seed except content:
 
 ```bash
-npx prisma db seed
+npm run db:seed
 ```
 
 This upserts 12 workouts and 3 meal plans by slug, and rewrites each plan's meals. It
@@ -238,8 +243,104 @@ npm run typecheck
 npm test
 ```
 
-Note that `run-checks.ps1` is not a useful gate here: its detected-stack list is empty, so
-it reports success without running anything against this project.
+CI runs both on every push to `main` and blocks the deploy if either fails, so this is
+checked automatically. Note that `run-checks.ps1` is not a useful gate here: its
+detected-stack list is empty, so it reports success without running anything against this
+project.
+
+## Railway / Render (managed container)
+
+The fastest route to a live URL with full functionality, and the one the CI workflow
+targets. No code change is needed: the app is already a plain Node server.
+
+Render if you prefer no vendor lock-in; Railway if you want the cheapest single service.
+The two setups below are identical apart from where you click.
+
+### 1. Create the service and mount a volume
+
+**Railway** — New Project → Deploy from GitHub repo → pick `sandeepsilumula/ApexFitness`.
+Then right-click the service → Mount Volume → `/data`. The volume is what makes SQLite
+survive a redeploy; without it every deploy resets the database and all accounts are lost.
+
+**Render** — New → Web Service → connect the repo. Under Disks, mount a disk at `/data`.
+The default free tier has no disk and no persistent filesystem, so a free Render service
+cannot run this app.
+
+### 2. Set the environment variables
+
+Add these on the service. Only `DATABASE_URL` is required; the rest change behaviour
+without breaking anything (see [Environment variables](#environment-variables)).
+
+| Variable | Value |
+| --- | --- |
+| `DATABASE_URL` | `file:/data/dev.db` — absolute, on the mounted volume |
+| `NEXT_PUBLIC_APP_URL` | `https://<your-app>.up.railway.app` (or `.onrender.com`) |
+| `NEXT_PUBLIC_PREMIUM_PRICE_LABEL` | e.g. `$9.99/month` — inlined at build time |
+| `STRIPE_SECRET_KEY` | only if you want real payments |
+| `STRIPE_PRICE_ID_PREMIUM` | only with a real Stripe key |
+| `STRIPE_WEBHOOK_SECRET` | only with a real Stripe key |
+| `ANTHROPIC_API_KEY` or `OPENROUTER_API_KEY` | only if you want the live coach |
+
+The absolute path matters. A relative `DATABASE_URL` resolves against the process working
+directory, which differs between the build step and the runtime on both platforms, so the
+file would be written somewhere that a redeploy does not preserve.
+
+### 3. Set the build and start commands
+
+Both platforms detect Node automatically, but set them explicitly so the SQLite path and
+the migrations are right:
+
+| Field | Value |
+| --- | --- |
+| Build command | `npm ci && npm run db:deploy && npm run build` |
+| Start command | `npm start` |
+| Health check path | `/api/workouts` |
+
+`db:deploy` runs `prisma migrate deploy`, which applies the committed migration without the
+prompting or reset behaviour of `migrate dev`. Run the seed once against the new volume:
+`npm run db:seed`.
+
+### 4. Wire up CI/CD
+
+`.github/workflows/deploy.yml` runs the full gate — `npm ci`, typecheck, 194 tests,
+`npm run build` — and only deploys if every step passes. Add two repository secrets under
+**Settings → Secrets and variables → Actions**:
+
+| Secret | Value |
+| --- | --- |
+| `RAILWAY_TOKEN` | A Railway API token with project deploy rights |
+| `RAILWAY_SERVICE_ID` | The service to deploy |
+
+The workflow uses `npx @railway/cli@latest up --service "$RAILWAY_SERVICE_ID"`. Note that
+Railway's CLI also triggers a *build* on the host, so the database migration and seed run
+from the platform's own build command in step 3, not from CI. CI's job is to gate on green
+tests and to hand the deploy to Railway.
+
+If you would rather let Railway deploy on git push and use CI only as a gate, delete the
+`deploy` job from the workflow and enable **GitHub integration → Deploy on push** on the
+service. The `verify` job stays either way.
+
+### 5. Verify
+
+Run the checks in [Post-deploy verification](#post-deploy-verification) against the public
+origin. In particular step 3 — the `Secure` cookie attribute only appears when
+`NODE_ENV` is `production`, which is the real test that you are hitting production and not
+a preview environment.
+
+## What this approach deliberately rules out
+
+**GitHub Pages and any other static host.** Pages serves files; it has no Node runtime, no
+API routes and no database. All ten pages of this app prerender as static content, so the
+UI would render — but every one of the 14 API routes would fail, taking auth, workouts,
+progress, diet, billing and the coach with it. A static host is a marketing page, not this
+app.
+
+**Vercel, without changing the database.** `vercel.json` in this repository predates the
+current setup and targets Vercel. Serverless functions have no persistent writable disk,
+so the SQLite file cannot survive between invocations and each request would open an empty
+database. Using Vercel properly means switching the Prisma datasource to PostgreSQL,
+writing a new migration, and accepting that a free Postgres tier will need replacing
+periodically. That is a real project, not a config change — hence Railway.
 
 ## Rollback
 

@@ -1,18 +1,74 @@
 name: Deploy
+
+# Every push to main runs the full gate, then deploys to Railway only if the
+# gate is green. The previous workflow ran `npm run build` alone and deployed
+# to Vercel, which cannot hold this app's SQLite file — a serverless function
+# has no persistent disk, so each request would see an empty database.
+
 on:
   push:
     branches: [main]
+  workflow_dispatch:
+
+# One in-flight deploy at a time. Two concurrent builds pushing to the same
+# service would race on the SQLite file on the mounted volume.
+concurrency:
+  group: deploy-production
+  cancel-in-progress: false
+
 jobs:
-  build:
+  verify:
+    name: Verify
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+
       - uses: actions/setup-node@v4
-        with: { node-version: 20 }
-      - run: npm ci
-      - run: npm run build
-      - uses: amondnet/vercel-action@v25
         with:
-          vercel-token: ${{ secrets.VERCEL_TOKEN }}
-          vercel-org-id: ${{ secrets.VERCEL_ORG_ID }}
-          vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID }}
+          node-version: 24
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      # Prisma Client is generated from schema.prisma. Without this step the
+      # typecheck fails with "no exported member 'PrismaClient'" across the
+      # API routes, pages and tests.
+      - name: Generate Prisma client
+        run: npx prisma generate
+
+      - name: Typecheck
+        run: npm run typecheck
+
+      # 194 tests. Both suites share one SQLite file and run single-threaded by
+      # design — see vitest.config.mts. The test database is a build artefact,
+      # so CI creates its own rather than using DATABASE_URL.
+      - name: Unit and API tests
+        run: npm test
+        env:
+          DATABASE_URL: file:./test.db
+
+      - name: Build
+        run: npm run build
+        env:
+          DATABASE_URL: file:./build.db
+
+  deploy:
+    name: Deploy to Railway
+    needs: verify
+    runs-on: ubuntu-latest
+    # The app is useless without its database, so a failed verify blocks the
+    # deploy rather than shipping a broken build to a live URL.
+    environment: production
+    steps:
+      - uses: actions/checkout@v4
+
+      # RAILWAY_TOKEN is a Railway API token with project deploy rights.
+      # RAILWAY_SERVICE_ID is the service to deploy. Both are repository
+      # secrets, set under Settings -> Secrets and variables -> Actions.
+      - name: Deploy
+        env:
+          RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
+          RAILWAY_SERVICE_ID: ${{ secrets.RAILWAY_SERVICE_ID }}
+        run: |
+          npx @railway/cli@latest up --service "$RAILWAY_SERVICE_ID"

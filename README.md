@@ -24,8 +24,8 @@ Design tokens and component rules live in [DESIGN.md](./DESIGN.md). Deployment i
 
 ```bash
 npm install
-npx prisma migrate dev     # creates the SQLite file and schema
-npx tsx prisma/seed.ts     # workouts, meal plans and meals
+npm run db:migrate     # creates the SQLite file and schema
+npm run db:seed        # workouts, meal plans and meals
 npm run dev
 ```
 
@@ -43,6 +43,12 @@ real implementation, not a stub. Nothing in the demo path reaches a third party.
 | `npm test` | Vitest, single-threaded |
 | `npm run coverage` | Vitest with v8 coverage over `lib/**` |
 | `npm run test:e2e` | Playwright, boots its own server on :3100 |
+| `npm run db:migrate` | Create and apply a migration (development) |
+| `npm run db:deploy` | Apply committed migrations (production) |
+| `npm run db:seed` | Load the 12 workouts and 3 meal plans |
+
+`build` and `typecheck` both run `prisma generate` first, and `postinstall` does too, so a
+fresh checkout cannot hit a missing Prisma Client.
 
 ## Architecture
 
@@ -186,14 +192,20 @@ All optional. `.env` and `.env.*` are gitignored.
 
 ## Deployment
 
-`docs/DEPLOYMENT.md` covers the real case: a Next.js server plus a SQLite file on a
-persistent writable volume. The short version — the host must have persistent writable
-storage, and two concurrent instances will diverge unless the filesystem is shared.
+The app is a single Node server plus one SQLite file, so it needs a host with a **persistent
+writable volume** — a serverless platform with an ephemeral disk would open an empty database
+on every request.
+
+Recommended: one Railway or Render service with a volume mounted at `/data` and
+`DATABASE_URL=file:/data/dev.db`. `.github/workflows/deploy.yml` runs typecheck, the 194
+tests and a production build on every push to `main`, and deploys only if all three pass.
+`docs/DEPLOYMENT.md` has the step-by-step setup, the environment variable table, an
+eight-step post-deploy verification and the rollback order.
 
 There is no static-export config. An earlier `next.config.js` set `output: 'export'`, which
 strips the server runtime and disables every API route; it was removed so `next.config.ts`
-is the single config. A CDN-only deploy of this app is therefore not possible without
-reinstating that, and it would mean giving up auth, workouts, coach and billing.
+is the single config. A CDN-only or GitHub Pages deploy of this app is therefore not
+possible — those hosts render the ten prerendered pages but none of the API behind them.
 
 ## Licence
 
